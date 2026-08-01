@@ -29,7 +29,7 @@ export default function Navbar() {
     >
       <nav className="max-w-7xl mx-auto px-6 lg:px-10 h-40 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
-          <span className="w-24 h-24 flex items-center justify-center overflow-visible group-hover:scale-110 transition-transform">
+          <span className="w-48 h-48 flex items-center justify-center overflow-visible group-hover:scale-110 transition-transform">
             <UIImage
               src={LOGO_URL}
               alt="Logomarca Brincaê Infláveis"
