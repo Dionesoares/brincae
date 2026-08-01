@@ -171,7 +171,7 @@ function ToysPanel({ showForm, setShowForm }) {
               >
                 <div className="relative aspect-[4/3] bg-white/5">
                   {toy.image_url ? (
-                    <UIImage src={toy.image_url} alt={toy.alt_text || toy.name} fittingType="fill" className="w-full h-full" />
+                    <UIImage src={toy.image_url} alt={toy.alt_text || toy.name} fittingType="fill" className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-white/20 font-heading">Sem imagem</div>
                   )}
@@ -351,7 +351,7 @@ function BannersPanel({ showForm, setShowForm }) {
             >
               <div className="relative w-full sm:w-64 shrink-0 aspect-[3/1] sm:aspect-[3/1] rounded-2xl overflow-hidden bg-white/5">
                 {banner.image_url ? (
-                  <UIImage src={banner.image_url} alt={banner.alt_text} fittingType="fill" className="w-full h-full" />
+                  <UIImage src={banner.image_url} alt={banner.alt_text} fittingType="fill" className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-white/20">
                     <ImageOff className="w-6 h-6" />

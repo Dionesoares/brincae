@@ -30,7 +30,7 @@ export default function ToyCard({ toy, index = 0 }) {
               src={toy.image_url}
               alt={toy.alt_text || toy.name}
               fittingType="fill"
-              className="w-full aspect-[4/3] group-hover:scale-105 transition-transform duration-700"
+              className="w-full aspect-[4/3] object-cover group-hover:scale-105 transition-transform duration-700"
             />
           ) : (
             <div className="w-full aspect-[4/3] bg-gradient-to-br from-cloud to-blue-50 flex items-center justify-center">

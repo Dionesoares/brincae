@@ -84,7 +84,7 @@ export default function BannerForm({ initial, nextPosition = 0, onSaved, onCance
         <div className="rounded-3xl border-2 border-dashed border-white/15 bg-white/5 p-6 flex flex-col items-center justify-center gap-4">
           {form.image_url ? (
             <div className="relative w-full">
-              <UIImage src={form.image_url} alt="Pré-visualização" fittingType="fill" className="w-full aspect-[3/1] rounded-2xl" />
+              <UIImage src={form.image_url} alt="Pré-visualização" fittingType="fill" className="w-full aspect-[3/1] rounded-2xl object-cover" />
               <button
                 type="button"
                 onClick={() => set("image_url", "")}

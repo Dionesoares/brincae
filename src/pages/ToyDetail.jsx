@@ -86,7 +86,7 @@ export default function ToyDetail() {
                   src={toy.image_url}
                   alt={toy.alt_text || toy.name}
                   fittingType="fill"
-                  className="w-full aspect-[4/3]"
+                  className="w-full aspect-[4/3] object-cover"
                 />
               ) : (
                 <div className="w-full aspect-[4/3] bg-gradient-to-br from-cloud to-blue-50" />

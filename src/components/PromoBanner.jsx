@@ -50,7 +50,7 @@ export default function PromoBanner() {
                   src={banner.image_url}
                   alt={banner.alt_text}
                   fittingType="fill"
-                  className="w-full aspect-square sm:aspect-[3/1] rounded-none sm:rounded-[2rem]"
+                  className="w-full aspect-square sm:aspect-[3/1] rounded-none sm:rounded-[2rem] object-cover"
                 />
               );
               return (
