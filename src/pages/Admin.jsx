@@ -7,7 +7,8 @@ import BannerForm from "@/components/BannerForm";
 import BrandingForm from "@/components/BrandingForm";
 import { Image as UIImage } from "@/components/ui/image";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
-import { Plus, Pencil, Trash2, X, Loader2, ExternalLink, ArrowUp, ArrowDown, ImageOff, EyeOff } from "lucide-react";
+import { useAuth } from "@/lib/AuthContext";
+import { Plus, Pencil, Trash2, X, Loader2, ExternalLink, ArrowUp, ArrowDown, ImageOff, EyeOff, LogOut } from "lucide-react";
 
 const statusMap = {
   disponivel: { label: "Disponível", cls: "bg-teal/15 text-teal" },
@@ -25,8 +26,15 @@ const NEW_LABEL = { toys: "Novo Brinquedo", banners: "Novo Banner" };
 
 export default function Admin() {
   const { logoUrl } = useSiteSettings();
+  const { logout } = useAuth();
   const [tab, setTab] = useState("toys");
   const [showForm, setShowForm] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setLoggingOut(true);
+    await logout();
+  };
 
   return (
     <div className="min-h-screen bg-cobalt text-white dark">
@@ -61,6 +69,15 @@ export default function Admin() {
                 <Plus className="w-5 h-5" /> {NEW_LABEL[tab]}
               </button>
             )}
+            <button
+              onClick={handleLogout}
+              disabled={loggingOut}
+              title="Sair"
+              className="h-12 w-12 sm:w-auto sm:px-5 inline-flex items-center justify-center gap-2 rounded-full bg-white/10 text-white font-bold hover:bg-white/15 transition-colors disabled:opacity-50"
+            >
+              {loggingOut ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogOut className="w-4 h-4" />}
+              <span className="hidden sm:inline">Sair</span>
+            </button>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-6 lg:px-10 flex gap-2 pb-4">
