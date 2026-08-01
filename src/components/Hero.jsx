@@ -9,7 +9,7 @@ const HERO_IMG =
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden pt-20">
+    <section className="relative min-h-screen flex items-center overflow-hidden pt-40">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-cloud via-cloud to-blue-50" />
       <div className="absolute -top-32 -right-32 w-[40rem] h-[40rem] rounded-full bg-orange/10 blur-3xl" />
