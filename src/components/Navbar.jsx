@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Lock } from "lucide-react";
 import { Image as UIImage } from "@/components/ui/image";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 export default function Navbar() {
   const { logoUrl } = useSiteSettings();
-  const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -27,9 +26,9 @@ export default function Navbar() {
         scrolled ? "bg-cloud/85 backdrop-blur-xl shadow-[0_8px_30px_-12px_rgba(10,17,40,0.15)]" : "bg-transparent"
       }`}
     >
-      <nav className="max-w-7xl mx-auto px-6 lg:px-10 h-40 flex items-center justify-between">
+      <nav className="max-w-7xl mx-auto px-6 lg:px-10 h-20 lg:h-40 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
-          <span className="w-48 h-48 flex items-center justify-center overflow-visible group-hover:scale-110 transition-transform">
+          <span className="w-16 h-16 lg:w-48 lg:h-48 flex items-center justify-center overflow-visible group-hover:scale-110 transition-transform">
             <UIImage
               src={logoUrl}
               alt="Logomarca Brincaê Infláveis"
@@ -39,7 +38,7 @@ export default function Navbar() {
           </span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-8">
           {links.map((l) => (
             <a
               key={l.href}
@@ -63,39 +62,16 @@ export default function Navbar() {
           </Link>
         </div>
 
-        <button
-          className="md:hidden w-12 h-12 rounded-2xl bg-cloud flex items-center justify-center text-cobalt shadow-md"
-          onClick={() => setOpen(!open)}
-          aria-label="Menu"
+        {/* Mobile/tablet: primary nav lives in the bottom tab bar, keep just a
+            discreet admin entry point here so it isn't lost. */}
+        <Link
+          to="/admin"
+          aria-label="Painel administrativo"
+          className="lg:hidden w-11 h-11 rounded-2xl bg-white/70 backdrop-blur flex items-center justify-center text-cobalt/60 shadow-md active:scale-95 transition-transform"
         >
-          {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
+          <Lock className="w-4 h-4" />
+        </Link>
       </nav>
-
-      {open && (
-        <div className="md:hidden bg-cloud border-t border-border px-6 py-6 flex flex-col gap-4">
-          {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              onClick={() => setOpen(false)}
-              className="text-base font-semibold text-cobalt/80 py-2"
-            >
-              {l.label}
-            </a>
-          ))}
-          <Link to="/admin" onClick={() => setOpen(false)} className="text-base font-semibold text-cobalt/50 py-2">
-            Painel Admin
-          </Link>
-          <a
-            href="#contato"
-            onClick={() => setOpen(false)}
-            className="h-12 px-6 inline-flex items-center justify-center rounded-full bg-orange text-white font-bold text-sm"
-          >
-            Reserve Agora
-          </a>
-        </div>
-      )}
     </header>
   );
 }

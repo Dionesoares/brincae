@@ -22,7 +22,7 @@ export default function ToyCard({ toy, index = 0 }) {
     >
       <Link
         to={`/brinquedo/${toy.id}`}
-        className="group block rounded-[2rem] bg-white shadow-[0_20px_60px_-25px_rgba(10,17,40,0.25)] hover:shadow-[0_30px_80px_-20px_rgba(255,95,31,0.35)] transition-all duration-500 overflow-hidden hover:-translate-y-2"
+        className="group block rounded-[2rem] bg-white shadow-[0_20px_60px_-25px_rgba(10,17,40,0.25)] hover:shadow-[0_30px_80px_-20px_rgba(255,95,31,0.35)] transition-all duration-500 overflow-hidden hover:-translate-y-2 active:scale-[0.98]"
       >
         <div className="relative overflow-hidden rounded-[2rem]">
           {toy.image_url ? (

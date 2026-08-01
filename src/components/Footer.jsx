@@ -12,8 +12,8 @@ export default function Footer() {
       <div className="absolute bottom-0 -right-20 w-[24rem] h-[24rem] rounded-full bg-pink/10 blur-3xl" />
       <div className="absolute top-1/2 -left-20 w-[20rem] h-[20rem] rounded-full bg-yellow/10 blur-3xl" />
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-10 py-20">
-        <div className="grid lg:grid-cols-2 gap-12 mb-16">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pt-14 pb-28 lg:pt-20 lg:pb-20">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 mb-12 lg:mb-16">
           <div>
             <span className="px-4 py-2 rounded-full bg-teal/15 text-teal text-sm font-bold mb-6 inline-block">
               Fale com a gente

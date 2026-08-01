@@ -61,12 +61,12 @@ export default function ToyGallery() {
         </div>
 
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-10">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex gap-2 overflow-x-auto no-scrollbar snap-x snap-mandatory -mx-6 px-6 sm:mx-0 sm:px-0 sm:flex-wrap w-full sm:w-auto">
             {SIZE_FILTERS.map((f) => (
               <button
                 key={f.id}
                 onClick={() => setFilter(f.id)}
-                className={`h-11 px-5 rounded-full text-sm font-bold transition-all ${
+                className={`h-11 px-5 rounded-full text-sm font-bold transition-all shrink-0 snap-start active:scale-95 ${
                   filter === f.id
                     ? "bg-orange text-white shadow-lg shadow-orange/30"
                     : "bg-white text-cobalt/70 hover:bg-cobalt hover:text-white border border-border"
@@ -98,7 +98,7 @@ export default function ToyGallery() {
             <p className="text-cobalt/50 mt-2">Tente outro filtro ou busca.</p>
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {filtered.map((toy, i) => (
               <ToyCard key={toy.id} toy={toy} index={i} />
             ))}

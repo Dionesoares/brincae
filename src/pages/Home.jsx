@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "@/components/Navbar";
+import MobileTabBar from "@/components/MobileTabBar";
 import PromoBanner from "@/components/PromoBanner";
 import Hero from "@/components/Hero";
 import ToyGallery from "@/components/ToyGallery";
@@ -17,6 +18,7 @@ export default function Home() {
         <HowItWorks />
       </main>
       <Footer />
+      <MobileTabBar />
     </div>
   );
 }

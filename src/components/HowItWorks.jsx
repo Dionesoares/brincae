@@ -38,12 +38,12 @@ const COLOR_STYLES = {
 
 export default function HowItWorks() {
   return (
-    <section id="como-funciona" className="py-24 lg:py-32 bg-cobalt text-white relative overflow-hidden">
+    <section id="como-funciona" className="py-14 sm:py-24 lg:py-32 bg-cobalt text-white relative overflow-hidden">
       <div className="absolute -top-40 -right-40 w-[35rem] h-[35rem] rounded-full bg-orange/10 blur-3xl" />
       <div className="absolute -bottom-40 -left-40 w-[35rem] h-[35rem] rounded-full bg-teal/10 blur-3xl" />
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 sm:mb-16">
           <span className="px-4 py-2 rounded-full bg-teal/15 text-teal text-sm font-bold mb-4 inline-block">
             Como funciona
           </span>
@@ -52,7 +52,7 @@ export default function HowItWorks() {
           </h2>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {STEPS.map((step, i) => (
             <motion.div
               key={step.title}
@@ -60,7 +60,7 @@ export default function HowItWorks() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1, ease: [0.34, 1.56, 0.64, 1] }}
-              className="rounded-[2rem] bg-white/5 border border-white/10 p-8 hover:bg-white/10 transition-colors"
+              className="rounded-[2rem] bg-white/5 border border-white/10 p-6 sm:p-8 hover:bg-white/10 transition-colors"
             >
               <span className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-lg ${COLOR_STYLES[step.color]}`}>
                 <step.icon className="w-7 h-7 text-white" />

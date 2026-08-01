@@ -40,7 +40,7 @@ export default function PromoBanner() {
   if (banners.length === 0) return null;
 
   return (
-    <section className="pt-40 bg-cloud" aria-label="Banners promocionais">
+    <section className="pt-24 lg:pt-40 bg-cloud" aria-label="Banners promocionais">
       <div className="max-w-7xl mx-auto px-6 lg:px-10 pt-6">
         <Carousel setApi={setApi} opts={{ loop: banners.length > 1 }}>
           <CarouselContent>

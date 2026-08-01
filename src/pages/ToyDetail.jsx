@@ -54,9 +54,26 @@ export default function ToyDetail() {
   ].filter((s) => s.value);
 
   return (
-    <div className="min-h-screen bg-cloud pt-24 pb-20">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        <Link to="/" className="inline-flex items-center gap-2 text-cobalt/60 hover:text-orange font-semibold mb-8">
+    <div className="min-h-screen bg-cloud">
+      {/* Mobile/tablet sticky detail header — native "product screen" pattern */}
+      <div className="lg:hidden sticky top-0 z-40 bg-cloud/95 backdrop-blur-xl border-b border-border">
+        <div className="h-14 px-4 flex items-center gap-3">
+          <Link
+            to="/"
+            aria-label="Voltar ao catálogo"
+            className="w-9 h-9 shrink-0 rounded-full bg-white flex items-center justify-center text-cobalt shadow-sm active:scale-95 transition-transform"
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </Link>
+          <p className="font-heading text-base text-cobalt truncate">{toy.name}</p>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 pt-6 pb-28 lg:pt-24 lg:pb-20">
+        <Link
+          to="/"
+          className="hidden lg:inline-flex items-center gap-2 text-cobalt/60 hover:text-orange font-semibold mb-8"
+        >
           <ArrowLeft className="w-4 h-4" /> Voltar ao catálogo
         </Link>
 
@@ -119,12 +136,12 @@ export default function ToyDetail() {
                     href={getWhatsAppLink(`Olá! Quero reservar o brinquedo "${toy.name}".`)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="h-14 mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-orange text-white font-bold shadow-xl shadow-orange/30 hover:scale-[1.02] transition-transform"
+                    className="hidden lg:inline-flex h-14 mt-2 items-center justify-center gap-2 rounded-full bg-orange text-white font-bold shadow-xl shadow-orange/30 hover:scale-[1.02] transition-transform"
                   >
                     <MessageCircle className="w-5 h-5" /> Reservar pelo WhatsApp
                   </a>
                 ) : (
-                  <div className="h-14 mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-cloud text-cobalt/50 font-bold">
+                  <div className="hidden lg:inline-flex h-14 mt-2 items-center justify-center gap-2 rounded-full bg-cloud text-cobalt/50 font-bold">
                     Indisponível no momento
                   </div>
                 )}
@@ -135,6 +152,39 @@ export default function ToyDetail() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Mobile/tablet fixed booking bar — pinned "checkout" action, like a
+          native app's product detail screen. Desktop keeps the sticky
+          sidebar card above instead. */}
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-border shadow-[0_-8px_30px_-12px_rgba(10,17,40,0.15)] pb-[env(safe-area-inset-bottom)]">
+        <div className="px-4 py-3 flex items-center gap-3">
+          {toy.price ? (
+            <div className="shrink-0">
+              <p className="text-[11px] text-cobalt/50 leading-none">Diária</p>
+              <p className="font-heading text-lg text-cobalt leading-tight">
+                R$ {Number(toy.price).toLocaleString("pt-BR")}
+              </p>
+            </div>
+          ) : (
+            <p className="text-xs text-cobalt/50 shrink-0">Consulte valores</p>
+          )}
+
+          {toy.status === "disponivel" ? (
+            <a
+              href={getWhatsAppLink(`Olá! Quero reservar o brinquedo "${toy.name}".`)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 h-12 inline-flex items-center justify-center gap-2 rounded-full bg-orange text-white font-bold shadow-lg shadow-orange/30 active:scale-95 transition-transform"
+            >
+              <MessageCircle className="w-4 h-4" /> Reservar
+            </a>
+          ) : (
+            <div className="flex-1 h-12 inline-flex items-center justify-center rounded-full bg-cloud text-cobalt/50 font-bold text-sm">
+              Indisponível no momento
+            </div>
+          )}
         </div>
       </div>
     </div>
