@@ -4,10 +4,10 @@ import { supabase } from "@/lib/supabaseClient";
 import { Link } from "react-router-dom";
 import ToyForm from "@/components/ToyForm";
 import BannerForm from "@/components/BannerForm";
+import BrandingForm from "@/components/BrandingForm";
 import { Image as UIImage } from "@/components/ui/image";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { Plus, Pencil, Trash2, X, Loader2, ExternalLink, ArrowUp, ArrowDown, ImageOff, EyeOff } from "lucide-react";
-
-const LOGO_URL = "/logo-brincae.png";
 
 const statusMap = {
   disponivel: { label: "Disponível", cls: "bg-teal/15 text-teal" },
@@ -18,9 +18,13 @@ const statusMap = {
 const TABS = [
   { id: "toys", label: "Brinquedos" },
   { id: "banners", label: "Banners promocionais" },
+  { id: "branding", label: "Marca" },
 ];
 
+const NEW_LABEL = { toys: "Novo Brinquedo", banners: "Novo Banner" };
+
 export default function Admin() {
+  const { logoUrl } = useSiteSettings();
   const [tab, setTab] = useState("toys");
   const [showForm, setShowForm] = useState(false);
 
@@ -32,7 +36,7 @@ export default function Admin() {
           <div className="flex items-center gap-2">
             <span className="w-12 h-12 rounded-2xl overflow-hidden">
               <UIImage
-                src={LOGO_URL}
+                src={logoUrl}
                 alt="Logomarca Brincaê Infláveis"
                 fittingType="fit"
                 className="w-full h-full object-contain"
@@ -49,12 +53,14 @@ export default function Admin() {
             <Link to="/" className="text-sm font-semibold text-white/60 hover:text-white transition-colors hidden sm:inline">
               Ver site
             </Link>
-            <button
-              onClick={() => setShowForm(true)}
-              className="h-12 px-6 inline-flex items-center gap-2 rounded-full bg-orange text-white font-bold shadow-lg shadow-orange/30 hover:scale-105 transition-transform"
-            >
-              <Plus className="w-5 h-5" /> {tab === "toys" ? "Novo Brinquedo" : "Novo Banner"}
-            </button>
+            {NEW_LABEL[tab] && (
+              <button
+                onClick={() => setShowForm(true)}
+                className="h-12 px-6 inline-flex items-center gap-2 rounded-full bg-orange text-white font-bold shadow-lg shadow-orange/30 hover:scale-105 transition-transform"
+              >
+                <Plus className="w-5 h-5" /> {NEW_LABEL[tab]}
+              </button>
+            )}
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-6 lg:px-10 flex gap-2 pb-4">
@@ -78,8 +84,10 @@ export default function Admin() {
       <main className="max-w-7xl mx-auto px-6 lg:px-10 py-10">
         {tab === "toys" ? (
           <ToysPanel showForm={showForm} setShowForm={setShowForm} />
-        ) : (
+        ) : tab === "banners" ? (
           <BannersPanel showForm={showForm} setShowForm={setShowForm} />
+        ) : (
+          <BrandingForm />
         )}
       </main>
     </div>

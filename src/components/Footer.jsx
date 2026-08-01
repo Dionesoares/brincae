@@ -2,10 +2,10 @@ import React from "react";
 import { Mail, MapPin, Phone, MessageCircle } from "lucide-react";
 import { Image as UIImage } from "@/components/ui/image";
 import { getWhatsAppLink, PHONE_DISPLAY } from "@/lib/whatsapp";
-
-const LOGO_URL = "/logo-brincae.png";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 export default function Footer() {
+  const { logoUrl } = useSiteSettings();
   return (
     <footer id="contato" className="bg-cobalt text-white relative overflow-hidden">
       <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[30rem] h-[30rem] rounded-full bg-orange/10 blur-3xl" />
@@ -106,7 +106,7 @@ export default function Footer() {
           <div className="flex items-center gap-2">
             <span className="w-10 h-10 rounded-xl overflow-hidden">
               <UIImage
-                src={LOGO_URL}
+                src={logoUrl}
                 alt="Logomarca Brincaê Infláveis"
                 fittingType="fit"
                 className="w-full h-full object-contain"

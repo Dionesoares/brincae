@@ -3,10 +3,10 @@ import { supabase } from "@/lib/supabaseClient";
 import { Lock, Mail, Loader2, ShieldCheck } from "lucide-react";
 import { Image as UIImage } from "@/components/ui/image";
 import ForgotPasswordModal from "@/components/ForgotPasswordModal";
-
-const LOGO_URL = "/logo-brincae.png";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 export default function AdminLoginModal() {
+  const { logoUrl } = useSiteSettings();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -40,7 +40,7 @@ export default function AdminLoginModal() {
         <div className="flex flex-col items-center text-center mb-8">
           <div className="w-32 h-32 rounded-3xl bg-white/5 flex items-center justify-center overflow-hidden mb-4 p-2">
             <UIImage
-              src={LOGO_URL}
+              src={logoUrl}
               alt="Logomarca Brincaê Infláveis"
               fittingType="fit"
               className="w-full h-full object-contain"

@@ -3,10 +3,10 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Image as UIImage } from "@/components/ui/image";
 import { getWhatsAppLink } from "@/lib/whatsapp";
-
-const HERO_IMG = "/logo-brincae.png";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 export default function Hero() {
+  const { heroImageUrl } = useSiteSettings();
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden pt-40">
       {/* Background gradient */}
@@ -75,7 +75,7 @@ export default function Hero() {
         >
           <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl shadow-cobalt/20 animate-float bg-gradient-to-br from-cloud to-blue-50 flex items-center justify-center aspect-square p-4">
             <UIImage
-              src={HERO_IMG}
+              src={heroImageUrl}
               alt="Logomarca Brincaê Infláveis"
               fittingType="fit"
               className="w-full h-full object-contain"

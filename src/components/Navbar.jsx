@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Image as UIImage } from "@/components/ui/image";
-
-const LOGO_URL = "/logo-brincae.png";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 export default function Navbar() {
+  const { logoUrl } = useSiteSettings();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -31,7 +31,7 @@ export default function Navbar() {
         <Link to="/" className="flex items-center gap-2 group">
           <span className="w-48 h-48 flex items-center justify-center overflow-visible group-hover:scale-110 transition-transform">
             <UIImage
-              src={LOGO_URL}
+              src={logoUrl}
               alt="Logomarca Brincaê Infláveis"
               fittingType="fit"
               className="w-full h-full object-contain"
