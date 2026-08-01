@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "@/components/Navbar";
+import PromoBanner from "@/components/PromoBanner";
 import Hero from "@/components/Hero";
 import ToyGallery from "@/components/ToyGallery";
 import HowItWorks from "@/components/HowItWorks";
@@ -10,6 +11,7 @@ export default function Home() {
     <div className="min-h-screen bg-cloud">
       <Navbar />
       <main>
+        <PromoBanner />
         <Hero />
         <ToyGallery />
         <HowItWorks />
