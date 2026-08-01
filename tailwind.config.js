@@ -52,6 +52,8 @@ module.exports = {
         cloud: 'hsl(var(--cloud))',
         orange: 'hsl(var(--orange))',
         teal: 'hsl(var(--teal))',
+        pink: 'hsl(var(--pink))',
+        yellow: 'hsl(var(--yellow))',
   			chart: {
   				'1': 'hsl(var(--chart-1))',
   				'2': 'hsl(var(--chart-2))',

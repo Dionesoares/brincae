@@ -10,6 +10,8 @@ export default function Footer() {
   return (
     <footer id="contato" className="bg-cobalt text-white relative overflow-hidden">
       <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[30rem] h-[30rem] rounded-full bg-orange/10 blur-3xl" />
+      <div className="absolute bottom-0 -right-20 w-[24rem] h-[24rem] rounded-full bg-pink/10 blur-3xl" />
+      <div className="absolute top-1/2 -left-20 w-[20rem] h-[20rem] rounded-full bg-yellow/10 blur-3xl" />
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-10 py-20">
         <div className="grid lg:grid-cols-2 gap-12 mb-16">

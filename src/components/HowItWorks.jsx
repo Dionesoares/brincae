@@ -7,23 +7,34 @@ const STEPS = [
     icon: ShieldCheck,
     title: "Segurança primeiro",
     desc: "Todos os infláveis passam por inspeção e higienização antes de cada evento.",
+    color: "orange",
   },
   {
     icon: Truck,
     title: "Entrega e montagem",
     desc: "Levamos até o seu local e montamos tudo com equipamento profissional.",
+    color: "teal",
   },
   {
     icon: Zap,
     title: "Energia inclusa",
     desc: "Sopradores e toda a estrutura elétrica necessária fazem parte do serviço.",
+    color: "pink",
   },
   {
     icon: Clock,
     title: "Diversão garantida",
     desc: "Fique com o brinquedo pelo tempo combinado e divirta-se sem preocupações.",
+    color: "yellow",
   },
 ];
+
+const COLOR_STYLES = {
+  orange: "bg-orange shadow-orange/30",
+  teal: "bg-teal shadow-teal/30",
+  pink: "bg-pink shadow-pink/30",
+  yellow: "bg-yellow shadow-yellow/30",
+};
 
 export default function HowItWorks() {
   return (
@@ -51,7 +62,7 @@ export default function HowItWorks() {
               transition={{ duration: 0.5, delay: i * 0.1, ease: [0.34, 1.56, 0.64, 1] }}
               className="rounded-[2rem] bg-white/5 border border-white/10 p-8 hover:bg-white/10 transition-colors"
             >
-              <span className="w-14 h-14 rounded-2xl bg-orange flex items-center justify-center mb-6 shadow-lg shadow-orange/30">
+              <span className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-lg ${COLOR_STYLES[step.color]}`}>
                 <step.icon className="w-7 h-7 text-white" />
               </span>
               <h3 className="font-heading text-xl mb-2">{step.title}</h3>

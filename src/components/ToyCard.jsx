@@ -40,6 +40,11 @@ export default function ToyCard({ toy, index = 0 }) {
           <span className={`absolute top-4 left-4 px-3 py-1.5 rounded-full text-xs font-bold ${status.cls}`}>
             {status.label}
           </span>
+          {toy.featured && (
+            <span className="absolute bottom-4 left-4 px-3 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-pink to-yellow text-white shadow-lg">
+              Destaque
+            </span>
+          )}
           <span className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-cobalt opacity-0 group-hover:opacity-100 transition-opacity">
             <ArrowUpRight className="w-5 h-5" />
           </span>

@@ -79,7 +79,7 @@ export default function Admin() {
       <main className="max-w-7xl mx-auto px-6 lg:px-10 py-10">
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
-          <Stat label="Total" value={toys.length} />
+          <Stat label="Total" value={toys.length} accent="pink" />
           <Stat label="Disponíveis" value={toys.filter((t) => t.status === "disponivel").length} accent="teal" />
           <Stat label="No Campo" value={toys.filter((t) => t.status === "no_campo").length} accent="orange" />
           <Stat label="Manutenção" value={toys.filter((t) => t.status === "manutencao").length} accent="red" />
@@ -188,6 +188,8 @@ function Stat({ label, value, accent = "white" }) {
     white: "text-white",
     teal: "text-teal",
     orange: "text-orange",
+    pink: "text-pink",
+    yellow: "text-yellow",
     red: "text-red-400",
   };
   return (

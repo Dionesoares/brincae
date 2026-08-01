@@ -14,6 +14,8 @@ export default function Hero() {
       <div className="absolute inset-0 bg-gradient-to-br from-cloud via-cloud to-blue-50" />
       <div className="absolute -top-32 -right-32 w-[40rem] h-[40rem] rounded-full bg-orange/10 blur-3xl" />
       <div className="absolute -bottom-32 -left-32 w-[40rem] h-[40rem] rounded-full bg-teal/10 blur-3xl" />
+      <div className="absolute top-1/3 left-1/4 w-[24rem] h-[24rem] rounded-full bg-pink/10 blur-3xl" />
+      <div className="absolute bottom-10 right-1/4 w-[20rem] h-[20rem] rounded-full bg-yellow/10 blur-3xl" />
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-12 items-center w-full">
         <motion.div
@@ -22,8 +24,8 @@ export default function Hero() {
           transition={{ duration: 0.7, ease: [0.34, 1.56, 0.64, 1] }}
           className="flex flex-col gap-6"
         >
-          <span className="inline-flex items-center gap-2 self-start px-4 py-2 rounded-full bg-teal/15 text-cobalt text-sm font-semibold">
-            <Sparkles className="w-4 h-4 text-teal" />
+          <span className="inline-flex items-center gap-2 self-start px-4 py-2 rounded-full bg-gradient-to-r from-pink/15 to-yellow/15 text-cobalt text-sm font-semibold">
+            <Sparkles className="w-4 h-4 text-pink" />
             Infláveis premium para eventos
           </span>
 
@@ -65,7 +67,7 @@ export default function Hero() {
               <p className="text-sm text-cobalt/60">Festas realizadas</p>
             </div>
             <div>
-              <p className="font-heading text-3xl text-cobalt">100%</p>
+              <p className="font-heading text-3xl text-yellow">100%</p>
               <p className="text-sm text-cobalt/60">Seguro</p>
             </div>
           </div>
