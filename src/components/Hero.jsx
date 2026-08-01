@@ -85,10 +85,6 @@ export default function Hero() {
               className="w-full aspect-[4/3]"
             />
           </div>
-          <div className="absolute -bottom-6 -left-6 glass-card rounded-3xl px-6 py-4 flex items-center gap-3">
-            <span className="w-3 h-3 rounded-full bg-teal animate-pulse" />
-            <span className="text-sm font-bold text-cobalt">Disponível esta semana</span>
-          </div>
         </motion.div>
       </div>
     </section>
