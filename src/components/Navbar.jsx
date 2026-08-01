@@ -30,7 +30,7 @@ export default function Navbar() {
     >
       <nav className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
-          <span className="w-14 h-14 rounded-2xl flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform">
+          <span className="w-40 h-40 rounded-2xl flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform">
             <UIImage src={LOGO_URL} alt="Logomarca Brincaê Infláveis" fittingType="fit" className="w-full h-full" />
           </span>
         </Link>
