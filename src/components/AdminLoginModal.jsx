@@ -4,7 +4,7 @@ import { Lock, Mail, Loader2, ShieldCheck } from "lucide-react";
 import { Image as UIImage } from "@/components/ui/image";
 
 const LOGO_URL =
-  "https://media.base44.com/images/public/6a6df82039b71decb31cf763/6d686827b_WhatsAppImage2026-08-01at103917.jpeg";
+  "https://media.base44.com/images/public/6a6df82039b71decb31cf763/5d9a7f8ae_WhatsApp_Image_2026-08-01_at_103917-removebg-preview.png";
 
 export default function AdminLoginModal() {
   const [email, setEmail] = useState("");

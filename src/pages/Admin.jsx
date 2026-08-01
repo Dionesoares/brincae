@@ -7,7 +7,7 @@ import { Image as UIImage } from "@/components/ui/image";
 import { Plus, Pencil, Trash2, X, Loader2, ExternalLink } from "lucide-react";
 
 const LOGO_URL =
-  "https://media.base44.com/images/public/6a6df82039b71decb31cf763/6d686827b_WhatsAppImage2026-08-01at103917.jpeg";
+  "https://media.base44.com/images/public/6a6df82039b71decb31cf763/5d9a7f8ae_WhatsApp_Image_2026-08-01_at_103917-removebg-preview.png";
 
 const statusMap = {
   disponivel: { label: "Disponível", cls: "bg-teal/15 text-teal" },

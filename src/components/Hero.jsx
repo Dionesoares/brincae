@@ -5,7 +5,7 @@ import { Image as UIImage } from "@/components/ui/image";
 import { getWhatsAppLink } from "@/lib/whatsapp";
 
 const HERO_IMG =
-  "https://media.base44.com/images/public/6a6df82039b71decb31cf763/21f7be8e7_Capturadetela2026-08-01105006.png";
+  "https://media.base44.com/images/public/6a6df82039b71decb31cf763/5d9a7f8ae_WhatsApp_Image_2026-08-01_at_103917-removebg-preview.png";
 
 export default function Hero() {
   return (
