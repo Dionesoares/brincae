@@ -34,13 +34,7 @@ export default function ToyGallery() {
         !query ||
         t.name?.toLowerCase().includes(query.toLowerCase()) ||
         t.description?.toLowerCase().includes(query.toLowerCase());
-      let matchesSize = true;
-      if (filter !== "all") {
-        const dim = (t.dimensions || "").toLowerCase();
-        if (filter === "pequeno") matchesSize = /([1-3])\s*m/.test(dim) && !/[4-9]\s*m/.test(dim.replace(/[1-3]\s*m/, ""));
-        if (filter === "medio") matchesSize = /([4-6])\s*m/.test(dim);
-        if (filter === "grande") matchesSize = /([7-9]|[1-9][0-9])\s*m/.test(dim);
-      }
+      const matchesSize = filter === "all" || t.size === filter;
       return matchesQuery && matchesSize;
     });
   }, [toys, filter, query]);

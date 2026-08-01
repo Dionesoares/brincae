@@ -8,6 +8,7 @@ const EMPTY = {
   description: "",
   image_url: "",
   alt_text: "",
+  size: "",
   dimensions: "",
   capacity: "",
   age_range: "",
@@ -24,7 +25,7 @@ export default function ToyForm({ initial, onSaved, onCancel }) {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (initial) setForm({ ...EMPTY, ...initial, price: initial.price ?? "" });
+    if (initial) setForm({ ...EMPTY, ...initial, price: initial.price ?? "", size: initial.size ?? "" });
   }, [initial]);
 
   const set = (key, value) => setForm((f) => ({ ...f, [key]: value }));
@@ -60,6 +61,7 @@ export default function ToyForm({ initial, onSaved, onCancel }) {
       const { id, ...rest } = form;
       const payload = {
         ...rest,
+        size: form.size || null,
         price: form.price ? Number(form.price) : null,
         featured: !!form.featured,
       };
@@ -112,6 +114,19 @@ export default function ToyForm({ initial, onSaved, onCancel }) {
       <div className="grid sm:grid-cols-2 gap-4">
         <Field label="Nome do brinquedo" required value={form.name} onChange={(v) => set("name", v)} />
         <Field label="Texto alternativo (acessibilidade)" required value={form.alt_text} onChange={(v) => set("alt_text", v)} placeholder="Ex: Castelo inflável laranja e azul" />
+        <div>
+          <label className="block text-sm font-bold text-white/80 mb-2">Tamanho</label>
+          <select
+            value={form.size}
+            onChange={(e) => set("size", e.target.value)}
+            className="w-full h-12 px-4 rounded-2xl bg-white/5 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-teal"
+          >
+            <option value="" className="bg-cobalt">Não definido</option>
+            <option value="pequeno" className="bg-cobalt">Pequeno</option>
+            <option value="medio" className="bg-cobalt">Médio</option>
+            <option value="grande" className="bg-cobalt">Grande</option>
+          </select>
+        </div>
         <Field label="Dimensões" value={form.dimensions} onChange={(v) => set("dimensions", v)} placeholder="6m x 4m x 3m" />
         <Field label="Capacidade" value={form.capacity} onChange={(v) => set("capacity", v)} placeholder="8 crianças" />
         <Field label="Faixa etária" value={form.age_range} onChange={(v) => set("age_range", v)} placeholder="3 a 12 anos" />
