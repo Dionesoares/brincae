@@ -1,0 +1,78 @@
+{
+  "name": "Toy",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Nome do brinquedo",
+      "description": "Nome comercial do brinquedo infl\u00e1vel"
+    },
+    "description": {
+      "type": "string",
+      "title": "Descri\u00e7\u00e3o",
+      "description": "Descri\u00e7\u00e3o detalhada do brinquedo"
+    },
+    "image_url": {
+      "type": "string",
+      "title": "Imagem",
+      "format": "uri",
+      "description": "URL da imagem principal do brinquedo"
+    },
+    "alt_text": {
+      "type": "string",
+      "title": "Texto alternativo (acessibilidade)",
+      "description": "Descri\u00e7\u00e3o da imagem para acessibilidade"
+    },
+    "dimensions": {
+      "type": "string",
+      "title": "Dimens\u00f5es",
+      "description": "Tamanho em metros (ex: 6m x 4m x 3m)"
+    },
+    "capacity": {
+      "type": "string",
+      "title": "Capacidade",
+      "description": "N\u00famero de crian\u00e7as simult\u00e2neas (ex: 8 crian\u00e7as)"
+    },
+    "age_range": {
+      "type": "string",
+      "title": "Faixa et\u00e1ria",
+      "description": "Idade recomendada (ex: 3 a 12 anos)"
+    },
+    "space_required": {
+      "type": "string",
+      "title": "Espa\u00e7o m\u00ednimo",
+      "description": "Espa\u00e7o necess\u00e1rio para montagem"
+    },
+    "energy_requirements": {
+      "type": "string",
+      "title": "Requisitos de energia",
+      "description": "Necessidade el\u00e9trica (ex: 1 tomada 110V/220V)"
+    },
+    "price": {
+      "type": "number",
+      "title": "Valor do aluguel",
+      "description": "Valor em reais por di\u00e1ria"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "disponivel",
+        "no_campo",
+        "manutencao"
+      ],
+      "default": "disponivel",
+      "description": "Disponibilidade do brinquedo"
+    },
+    "featured": {
+      "type": "boolean",
+      "title": "Destaque",
+      "default": false,
+      "description": "Exibir em destaque na home"
+    }
+  },
+  "required": [
+    "name",
+    "alt_text"
+  ]
+}
