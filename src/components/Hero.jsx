@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Image as UIImage } from "@/components/ui/image";
 import { getWhatsAppLink } from "@/lib/whatsapp";
 
@@ -24,11 +24,6 @@ export default function Hero() {
           transition={{ duration: 0.7, ease: [0.34, 1.56, 0.64, 1] }}
           className="flex flex-col gap-6"
         >
-          <span className="inline-flex items-center gap-2 self-start px-4 py-2 rounded-full bg-gradient-to-r from-pink/15 to-yellow/15 text-cobalt text-sm font-semibold">
-            <Sparkles className="w-4 h-4 text-pink" />
-            Infláveis premium para eventos
-          </span>
-
           <h1 className="font-heading text-5xl sm:text-6xl lg:text-7xl leading-[0.95] text-cobalt text-balance">
             Reserve sua
             <span className="block text-orange">diversão</span>
