@@ -6,6 +6,8 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import AdminLoginModal from '@/components/AdminLoginModal';
 // Add page imports here
 import Home from './pages/Home';
 import Admin from './pages/Admin';
@@ -40,7 +42,9 @@ const AuthenticatedApp = () => {
       {/* Add your page Route elements here */}
       <Route path="/" element={<Home />} />
       <Route path="/brinquedo/:id" element={<ToyDetail />} />
-      <Route path="/admin" element={<Admin />} />
+      <Route element={<ProtectedRoute unauthenticatedElement={<AdminLoginModal />} />}>
+        <Route path="/admin" element={<Admin />} />
+      </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

@@ -4,7 +4,10 @@ import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import ToyForm from "@/components/ToyForm";
 import { Image as UIImage } from "@/components/ui/image";
-import { Plus, Pencil, Trash2, Wind, X, Loader2, ExternalLink } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Loader2, ExternalLink } from "lucide-react";
+
+const LOGO_URL =
+  "https://media.base44.com/images/public/6a6df82039b71decb31cf763/6d686827b_WhatsAppImage2026-08-01at103917.jpeg";
 
 const statusMap = {
   disponivel: { label: "Disponível", cls: "bg-teal/15 text-teal" },
@@ -49,8 +52,8 @@ export default function Admin() {
       <header className="border-b border-white/10 sticky top-0 z-30 bg-cobalt/90 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="w-10 h-10 rounded-2xl bg-orange flex items-center justify-center">
-              <Wind className="w-5 h-5" />
+            <span className="w-12 h-12 rounded-2xl overflow-hidden">
+              <UIImage src={LOGO_URL} alt="Logomarca Brincaê Infláveis" fittingType="fit" className="w-full h-full" />
             </span>
             <div>
               <p className="font-heading text-lg leading-none">

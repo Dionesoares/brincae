@@ -3,7 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Image as UIImage } from "@/components/ui/image";
-import { ArrowLeft, Ruler, Users, Calendar, Zap, MapPin, Check, Mail } from "lucide-react";
+import { ArrowLeft, Ruler, Users, Calendar, Zap, MapPin, Check, MessageCircle } from "lucide-react";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 const statusMap = {
   disponivel: { label: "Disponível", cls: "bg-teal/15 text-teal" },
@@ -111,10 +112,12 @@ export default function ToyDetail() {
 
                 {toy.status === "disponivel" ? (
                   <a
-                    href={`mailto:comercial@trafficclicks.com.br?subject=Reserva: ${encodeURIComponent(toy.name)}`}
+                    href={getWhatsAppLink(`Olá! Quero reservar o brinquedo "${toy.name}".`)}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="h-14 mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-orange text-white font-bold shadow-xl shadow-orange/30 hover:scale-[1.02] transition-transform"
                   >
-                    <Mail className="w-5 h-5" /> Reservar este brinquedo
+                    <MessageCircle className="w-5 h-5" /> Reservar pelo WhatsApp
                   </a>
                 ) : (
                   <div className="h-14 mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-cloud text-cobalt/50 font-bold">

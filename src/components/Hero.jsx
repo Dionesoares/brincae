@@ -2,9 +2,10 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Image as UIImage } from "@/components/ui/image";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 const HERO_IMG =
-  "https://media.base44.com/images/public/6a6df82039b71decb31cf763/d52ad6f34_generated_79b2ec94.png";
+  "https://media.base44.com/images/public/6a6df82039b71decb31cf763/21f7be8e7_Capturadetela2026-08-01105006.png";
 
 export default function Hero() {
   return (
@@ -45,7 +46,9 @@ export default function Hero() {
               Ver Brinquedos <ArrowRight className="w-5 h-5" />
             </a>
             <a
-              href="#contato"
+              href={getWhatsAppLink("Olá! Quero saber mais sobre os brinquedos infláveis Brincaê Fest.")}
+              target="_blank"
+              rel="noopener noreferrer"
               className="h-14 px-8 inline-flex items-center rounded-full bg-white text-cobalt font-bold border-2 border-cobalt/10 hover:border-orange transition-colors"
             >
               Falar com a gente
@@ -77,7 +80,7 @@ export default function Hero() {
           <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl shadow-cobalt/20 animate-float">
             <UIImage
               src={HERO_IMG}
-              alt="Brinquedo inflável premium Brincaê Fest em laranja e azul cobalto"
+              alt="Castelo inflável Brincaê Fest em laranja, azul cobalto e branco"
               fittingType="fill"
               className="w-full aspect-[4/3]"
             />

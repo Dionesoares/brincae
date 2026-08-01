@@ -1,5 +1,10 @@
 import React from "react";
-import { Mail, MapPin, Phone, Wind, Send } from "lucide-react";
+import { Mail, MapPin, Phone, MessageCircle } from "lucide-react";
+import { Image as UIImage } from "@/components/ui/image";
+import { getWhatsAppLink, PHONE_DISPLAY } from "@/lib/whatsapp";
+
+const LOGO_URL =
+  "https://media.base44.com/images/public/6a6df82039b71decb31cf763/6d686827b_WhatsAppImage2026-08-01at103917.jpeg";
 
 export default function Footer() {
   return (
@@ -31,6 +36,18 @@ export default function Footer() {
                 comercial@trafficclicks.com.br
               </a>
 
+              <a
+                href={getWhatsAppLink("Olá! Quero saber mais sobre os brinquedos infláveis Brincaê Fest.")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-4 text-lg font-semibold hover:text-orange transition-colors"
+              >
+                <span className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center group-hover:bg-orange transition-colors">
+                  <Phone className="w-5 h-5" />
+                </span>
+                {PHONE_DISPLAY}
+              </a>
+
               <div className="inline-flex items-center gap-4 text-lg font-semibold">
                 <span className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center">
                   <MapPin className="w-5 h-5" />
@@ -48,10 +65,10 @@ export default function Footer() {
             onSubmit={(e) => {
               e.preventDefault();
               const data = new FormData(e.target);
-              const body = `Olá! Quero alugar um brinquedo.%0A%0ANome: ${data.get(
-                "nome"
-              )}%0AData do evento: ${data.get("data")}%0AMensagem: ${data.get("msg")}`;
-              window.location.href = `mailto:comercial@trafficclicks.com.br?subject=Reserva de brinquedo&body=${body}`;
+              const msg = `Olá! Quero alugar um brinquedo.\nNome: ${data.get("nome")}\nData do evento: ${data.get(
+                "data"
+              )}\nMensagem: ${data.get("msg")}`;
+              window.open(getWhatsAppLink(msg), "_blank");
             }}
             className="rounded-[2rem] bg-white/5 border border-white/10 p-8 flex flex-col gap-4"
           >
@@ -79,15 +96,15 @@ export default function Footer() {
               type="submit"
               className="h-14 px-8 inline-flex items-center justify-center gap-2 rounded-full bg-orange text-white font-bold shadow-xl shadow-orange/30 hover:scale-[1.02] transition-transform"
             >
-              Enviar reserva <Send className="w-4 h-4" />
+              Enviar pelo WhatsApp <MessageCircle className="w-4 h-4" />
             </button>
           </form>
         </div>
 
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="w-9 h-9 rounded-xl bg-orange flex items-center justify-center">
-              <Wind className="w-4 h-4" />
+            <span className="w-10 h-10 rounded-xl overflow-hidden">
+              <UIImage src={LOGO_URL} alt="Logomarca Brincaê Infláveis" fittingType="fit" className="w-full h-full" />
             </span>
             <span className="font-heading text-lg">
               Brincaê<span className="text-orange">Fest</span>
