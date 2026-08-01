@@ -73,7 +73,7 @@ export default function Hero() {
           transition={{ duration: 0.8, ease: [0.34, 1.56, 0.64, 1], delay: 0.2 }}
           className="relative"
         >
-          <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl shadow-cobalt/20 animate-float bg-gradient-to-br from-cloud to-blue-50 flex items-center justify-center aspect-[4/3] p-10">
+          <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl shadow-cobalt/20 animate-float bg-gradient-to-br from-cloud to-blue-50 flex items-center justify-center aspect-square p-4">
             <UIImage
               src={HERO_IMG}
               alt="Logomarca Brincaê Infláveis"
