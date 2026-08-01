@@ -41,7 +41,7 @@ export default function PromoBanner() {
 
   return (
     <section className="pt-24 lg:pt-40 bg-cloud" aria-label="Banners promocionais">
-      <div className="max-w-7xl mx-auto px-0 sm:px-6 lg:px-10 pt-6">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 pt-6">
         <Carousel setApi={setApi} opts={{ loop: banners.length > 1 }}>
           <CarouselContent>
             {banners.map((banner) => {
@@ -50,12 +50,12 @@ export default function PromoBanner() {
                   src={banner.image_url}
                   alt={banner.alt_text}
                   fittingType="fill"
-                  className="w-full aspect-square sm:aspect-[3/1] rounded-none sm:rounded-[2rem] object-cover"
+                  className="w-full aspect-[16/9] sm:aspect-[3/1] rounded-[2rem] object-cover"
                 />
               );
               return (
                 <CarouselItem key={banner.id} className="basis-full">
-                  <div className="overflow-hidden rounded-none sm:rounded-[2rem] shadow-none sm:shadow-xl sm:shadow-cobalt/10">
+                  <div className="overflow-hidden rounded-[2rem] shadow-xl shadow-cobalt/10">
                     {banner.link_url ? (
                       <a
                         href={banner.link_url}
