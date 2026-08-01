@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/lib/supabaseClient";
 import { Mail, ArrowLeft, Loader2, ShieldCheck, MailCheck } from "lucide-react";
 
 export default function ForgotPasswordModal({ onBack }) {
@@ -11,7 +11,9 @@ export default function ForgotPasswordModal({ onBack }) {
     e.preventDefault();
     setLoading(true);
     try {
-      await base44.auth.resetPasswordRequest(email);
+      await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
     } catch {
       // Always show generic success, regardless of whether the email exists
     } finally {

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/lib/supabaseClient";
 import { useQuery } from "@tanstack/react-query";
 import ToyCard from "@/components/ToyCard";
 import { Loader2, Search } from "lucide-react";
@@ -17,7 +17,15 @@ export default function ToyGallery() {
 
   const { data: toys = [], isLoading } = useQuery({
     queryKey: ["toys"],
-    queryFn: () => base44.entities.Toy.list("-created_date", 100),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("toys")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(100);
+      if (error) throw error;
+      return data;
+    },
   });
 
   const filtered = useMemo(() => {

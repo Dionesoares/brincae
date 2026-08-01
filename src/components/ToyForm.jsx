@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/lib/supabaseClient";
 import { UploadCloud, Loader2, X } from "lucide-react";
 import { Image as UIImage } from "@/components/ui/image";
 
@@ -34,8 +34,14 @@ export default function ToyForm({ initial, onSaved, onCancel }) {
     if (!file) return;
     setUploading(true);
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      set("image_url", file_url);
+      const ext = file.name.split(".").pop();
+      const path = `${crypto.randomUUID()}.${ext}`;
+      const { error: uploadError } = await supabase.storage
+        .from("toy-images")
+        .upload(path, file, { cacheControl: "3600", upsert: false });
+      if (uploadError) throw uploadError;
+      const { data } = supabase.storage.from("toy-images").getPublicUrl(path);
+      set("image_url", data.publicUrl);
     } catch (err) {
       alert("Erro ao enviar imagem. Tente novamente.");
     } finally {
@@ -51,16 +57,16 @@ export default function ToyForm({ initial, onSaved, onCancel }) {
     }
     setSaving(true);
     try {
+      const { id, ...rest } = form;
       const payload = {
-        ...form,
+        ...rest,
         price: form.price ? Number(form.price) : null,
         featured: !!form.featured,
       };
-      if (form.id) {
-        await base44.entities.Toy.update(form.id, payload);
-      } else {
-        await base44.entities.Toy.create(payload);
-      }
+      const { error } = id
+        ? await supabase.from("toys").update(payload).eq("id", id)
+        : await supabase.from("toys").insert(payload);
+      if (error) throw error;
       onSaved?.();
     } catch (err) {
       alert("Erro ao salvar brinquedo. Verifique os campos.");

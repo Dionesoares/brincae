@@ -2,33 +2,23 @@
 
 ## Project Context
 
-This is a Base44 app repository. Treat it as user-owned application code, keep changes focused on the user's request, and preserve existing project conventions.
+Brincaê Fest is a React + Vite single-page app for an inflatable-toy rental business: a public catalog (`/`, `/brinquedo/:id`) plus a password-protected admin panel (`/admin`) for managing the toy catalog. The backend is [Supabase](https://supabase.com) (Postgres, Auth, Storage). The app deploys to [Vercel](https://vercel.com), auto-deploying from the `main` branch on GitHub.
 
-Start with `README.md` for local setup, environment variables, and publish workflow.
-
-## Base44 References
-
-- CLI overview: https://docs.base44.com/developers/references/cli/get-started/overview.md
-- Agent skills: https://docs.base44.com/developers/backend/overview/skills.md
-
-If your agent supports Agent Skills, install or update Base44 skills before Base44-specific work:
-
-```bash
-npx skills add base44/skills
-```
+Start with `README.md` for local setup and environment variables.
 
 ## Key Files
 
 - `src/`: frontend application source.
-- `src/api/base44Client.js`: frontend Base44 SDK client.
-- `vite.config.js`: Vite config and Base44 Vite plugin setup.
+- `src/lib/supabaseClient.js`: Supabase JS client, initialized from `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`.
+- `src/lib/AuthContext.jsx`: auth/session state (Supabase Auth session + `profiles.role`).
+- `supabase/migrations/`: SQL migrations for the Postgres schema (`profiles`, `toys`, RLS policies, storage bucket).
+- `vite.config.js`: Vite config (plain `@vitejs/plugin-react`, with the `@/*` → `src/*` alias).
 - `.env.local`: local-only environment values; never commit secrets.
 
 ## Working Notes
 
-- Use `base44 dev` as the default local development command when you need the local Base44 backend. It can run the backend and frontend together.
-- When docs or code mention the frontend being started automatically, that usually means the Base44 project config includes `site.serveCommand`, for example `"serveCommand": "npm run dev"` in `base44/config.jsonc`.
-- Use `npm run dev` only for frontend-only work against the hosted Base44 backend.
-- Prefer the existing Base44 CLI workflow over adding new npm scripts for Base44-specific tasks.
-- Reuse the existing SDK client and Vite plugin patterns before adding new Base44 integration paths.
-- Run the relevant checks from `package.json` before finishing code changes.
+- Run `npm run dev` for local frontend development against the hosted Supabase project (values from `.env.local`).
+- Database schema changes go in `supabase/migrations/*.sql`; apply them with `supabase db push --linked` (requires `supabase link --project-ref <ref>` once per machine).
+- The `toys` table is publicly readable; writes require the caller's `profiles.role` to be `admin` (enforced by RLS, see `supabase/migrations/`). Promote a user to admin with a one-off SQL update — there is no self-service UI for this by design.
+- Toy images are uploaded to the `toy-images` Supabase Storage bucket (public read, admin-only write).
+- Run `npm run lint` and `npm run build` before finishing code changes.

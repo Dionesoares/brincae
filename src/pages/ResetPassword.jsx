@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/lib/supabaseClient";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,12 +9,49 @@ import AuthLayout from "@/components/AuthLayout";
 
 export default function ResetPassword() {
   const [searchParams] = useSearchParams();
-  const resetToken = searchParams.get("token");
+  const code = searchParams.get("code");
+  const hasHashToken =
+    typeof window !== "undefined" && window.location.hash.includes("type=recovery");
 
+  const [checking, setChecking] = useState(true);
+  const [hasSession, setHasSession] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+
+    const init = async () => {
+      if (code) {
+        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+        if (active) {
+          setHasSession(!exchangeError);
+          setChecking(false);
+        }
+        return;
+      }
+      const { data } = await supabase.auth.getSession();
+      if (active) {
+        setHasSession(!!data.session);
+        setChecking(false);
+      }
+    };
+    init();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "PASSWORD_RECOVERY" && session && active) {
+        setHasSession(true);
+        setChecking(false);
+      }
+    });
+
+    return () => {
+      active = false;
+      subscription.unsubscribe();
+    };
+  }, [code]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +62,8 @@ export default function ResetPassword() {
     }
     setLoading(true);
     try {
-      await base44.auth.resetPassword({ resetToken, newPassword });
+      const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });
+      if (updateError) throw updateError;
       window.location.href = "/admin";
     } catch (err) {
       setError(err.message || "Falha ao redefinir a senha");
@@ -34,7 +72,15 @@ export default function ResetPassword() {
     }
   };
 
-  if (!resetToken) {
+  if (checking) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (!hasSession && !hasHashToken) {
     return (
       <AuthLayout
         icon={AlertTriangle}
@@ -47,7 +93,7 @@ export default function ResetPassword() {
         }
       >
         <p className="text-sm text-foreground text-center">
-          O link utilizado parece estar incompleto. Solicite um novo link pela tela de login do painel administrativo.
+          O link utilizado parece estar incompleto ou expirado. Solicite um novo link pela tela de login do painel administrativo.
         </p>
       </AuthLayout>
     );

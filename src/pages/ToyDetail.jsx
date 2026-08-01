@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/lib/supabaseClient";
 import { Image as UIImage } from "@/components/ui/image";
 import { ArrowLeft, Ruler, Users, Calendar, Zap, MapPin, Check, MessageCircle } from "lucide-react";
 import { getWhatsAppLink } from "@/lib/whatsapp";
@@ -16,7 +16,11 @@ export default function ToyDetail() {
   const { id } = useParams();
   const { data: toy, isLoading } = useQuery({
     queryKey: ["toy", id],
-    queryFn: () => base44.entities.Toy.get(id),
+    queryFn: async () => {
+      const { data, error } = await supabase.from("toys").select("*").eq("id", id).single();
+      if (error) return null;
+      return data;
+    },
     enabled: !!id,
   });
 

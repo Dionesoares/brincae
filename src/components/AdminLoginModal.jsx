@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/lib/supabaseClient";
 import { Lock, Mail, Loader2, ShieldCheck } from "lucide-react";
 import { Image as UIImage } from "@/components/ui/image";
 import ForgotPasswordModal from "@/components/ForgotPasswordModal";
@@ -19,7 +19,8 @@ export default function AdminLoginModal() {
     setError("");
     setLoading(true);
     try {
-      await base44.auth.loginViaEmailPassword(email, password);
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
       window.location.href = "/admin";
     } catch (err) {
       setError(err.message || "E-mail ou senha inválidos");

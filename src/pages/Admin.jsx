@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/lib/supabaseClient";
 import { Link } from "react-router-dom";
 import ToyForm from "@/components/ToyForm";
 import { Image as UIImage } from "@/components/ui/image";
@@ -22,7 +22,15 @@ export default function Admin() {
 
   const { data: toys = [], isLoading } = useQuery({
     queryKey: ["toys"],
-    queryFn: () => base44.entities.Toy.list("-created_date", 200),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("toys")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(200);
+      if (error) throw error;
+      return data;
+    },
   });
 
   const openNew = () => {
@@ -42,7 +50,11 @@ export default function Admin() {
 
   const handleDelete = async (toy) => {
     if (!confirm(`Excluir "${toy.name}"?`)) return;
-    await base44.entities.Toy.delete(toy.id);
+    const { error } = await supabase.from("toys").delete().eq("id", toy.id);
+    if (error) {
+      alert("Erro ao excluir brinquedo.");
+      return;
+    }
     qc.invalidateQueries({ queryKey: ["toys"] });
   };
 
