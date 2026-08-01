@@ -12,6 +12,7 @@ import AdminLoginModal from '@/components/AdminLoginModal';
 import Home from './pages/Home';
 import Admin from './pages/Admin';
 import ToyDetail from './pages/ToyDetail';
+import ResetPassword from './pages/ResetPassword';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -42,6 +43,7 @@ const AuthenticatedApp = () => {
       {/* Add your page Route elements here */}
       <Route path="/" element={<Home />} />
       <Route path="/brinquedo/:id" element={<ToyDetail />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route element={<ProtectedRoute unauthenticatedElement={<AdminLoginModal />} />}>
         <Route path="/admin" element={<Admin />} />
       </Route>

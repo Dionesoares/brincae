@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Lock, Mail, Loader2, ShieldCheck } from "lucide-react";
 import { Image as UIImage } from "@/components/ui/image";
+import ForgotPasswordModal from "@/components/ForgotPasswordModal";
 
 const LOGO_URL =
   "https://media.base44.com/images/public/6a6df82039b71decb31cf763/5d9a7f8ae_WhatsApp_Image_2026-08-01_at_103917-removebg-preview.png";
@@ -11,6 +12,7 @@ export default function AdminLoginModal() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showForgot, setShowForgot] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,6 +26,10 @@ export default function AdminLoginModal() {
       setLoading(false);
     }
   };
+
+  if (showForgot) {
+    return <ForgotPasswordModal onBack={() => setShowForgot(false)} />;
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-cobalt">
@@ -86,6 +92,13 @@ export default function AdminLoginModal() {
             Entrar
           </button>
         </form>
+
+        <button
+          onClick={() => setShowForgot(true)}
+          className="w-full mt-5 text-sm font-semibold text-white/50 hover:text-white transition-colors"
+        >
+          Esqueceu sua senha?
+        </button>
       </div>
     </div>
   );
