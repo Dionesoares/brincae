@@ -4,8 +4,7 @@ import { Lock, Mail, Loader2, ShieldCheck } from "lucide-react";
 import { Image as UIImage } from "@/components/ui/image";
 import ForgotPasswordModal from "@/components/ForgotPasswordModal";
 
-const LOGO_URL =
-  "https://media.base44.com/images/public/6a6df82039b71decb31cf763/5d9a7f8ae_WhatsApp_Image_2026-08-01_at_103917-removebg-preview.png";
+const LOGO_URL = "/logo-brincae.png";
 
 export default function AdminLoginModal() {
   const [email, setEmail] = useState("");
@@ -44,7 +43,7 @@ export default function AdminLoginModal() {
               src={LOGO_URL}
               alt="Logomarca Brincaê Infláveis"
               fittingType="fit"
-              className="w-full h-full"
+              className="w-full h-full object-contain"
             />
           </div>
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal/15 text-teal text-xs font-bold mb-2">

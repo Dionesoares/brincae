@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Image as UIImage } from "@/components/ui/image";
 
-const LOGO_URL =
-  "https://media.base44.com/images/public/6a6df82039b71decb31cf763/5d9a7f8ae_WhatsApp_Image_2026-08-01_at_103917-removebg-preview.png";
+const LOGO_URL = "/logo-brincae.png";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -30,8 +29,13 @@ export default function Navbar() {
     >
       <nav className="max-w-7xl mx-auto px-6 lg:px-10 h-40 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
-          <span className="w-40 h-40 flex items-center justify-center overflow-visible group-hover:scale-110 transition-transform">
-            <UIImage src={LOGO_URL} alt="Logomarca Brincaê Infláveis" fittingType="fit" className="w-full h-full" />
+          <span className="w-[30rem] h-[30rem] flex items-center justify-center overflow-visible group-hover:scale-110 transition-transform">
+            <UIImage
+              src={LOGO_URL}
+              alt="Logomarca Brincaê Infláveis"
+              fittingType="fit"
+              className="w-full h-full object-contain"
+            />
           </span>
         </Link>
 

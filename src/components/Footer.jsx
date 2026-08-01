@@ -3,8 +3,7 @@ import { Mail, MapPin, Phone, MessageCircle } from "lucide-react";
 import { Image as UIImage } from "@/components/ui/image";
 import { getWhatsAppLink, PHONE_DISPLAY } from "@/lib/whatsapp";
 
-const LOGO_URL =
-  "https://media.base44.com/images/public/6a6df82039b71decb31cf763/5d9a7f8ae_WhatsApp_Image_2026-08-01_at_103917-removebg-preview.png";
+const LOGO_URL = "/logo-brincae.png";
 
 export default function Footer() {
   return (
@@ -106,7 +105,12 @@ export default function Footer() {
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <span className="w-10 h-10 rounded-xl overflow-hidden">
-              <UIImage src={LOGO_URL} alt="Logomarca Brincaê Infláveis" fittingType="fit" className="w-full h-full" />
+              <UIImage
+                src={LOGO_URL}
+                alt="Logomarca Brincaê Infláveis"
+                fittingType="fit"
+                className="w-full h-full object-contain"
+              />
             </span>
             <span className="font-heading text-lg">
               Brincaê<span className="text-orange">Fest</span>

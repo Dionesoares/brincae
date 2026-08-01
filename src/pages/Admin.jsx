@@ -7,8 +7,7 @@ import BannerForm from "@/components/BannerForm";
 import { Image as UIImage } from "@/components/ui/image";
 import { Plus, Pencil, Trash2, X, Loader2, ExternalLink, ArrowUp, ArrowDown, ImageOff, EyeOff } from "lucide-react";
 
-const LOGO_URL =
-  "https://media.base44.com/images/public/6a6df82039b71decb31cf763/5d9a7f8ae_WhatsApp_Image_2026-08-01_at_103917-removebg-preview.png";
+const LOGO_URL = "/logo-brincae.png";
 
 const statusMap = {
   disponivel: { label: "Disponível", cls: "bg-teal/15 text-teal" },
@@ -32,7 +31,12 @@ export default function Admin() {
         <div className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-12 h-12 rounded-2xl overflow-hidden">
-              <UIImage src={LOGO_URL} alt="Logomarca Brincaê Infláveis" fittingType="fit" className="w-full h-full" />
+              <UIImage
+                src={LOGO_URL}
+                alt="Logomarca Brincaê Infláveis"
+                fittingType="fit"
+                className="w-full h-full object-contain"
+              />
             </span>
             <div>
               <p className="font-heading text-lg leading-none">

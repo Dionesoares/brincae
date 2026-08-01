@@ -4,8 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { Image as UIImage } from "@/components/ui/image";
 import { getWhatsAppLink } from "@/lib/whatsapp";
 
-const HERO_IMG =
-  "https://media.base44.com/images/public/6a6df82039b71decb31cf763/5d9a7f8ae_WhatsApp_Image_2026-08-01_at_103917-removebg-preview.png";
+const HERO_IMG = "/logo-brincae.png";
 
 export default function Hero() {
   return (
@@ -74,12 +73,12 @@ export default function Hero() {
           transition={{ duration: 0.8, ease: [0.34, 1.56, 0.64, 1], delay: 0.2 }}
           className="relative"
         >
-          <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl shadow-cobalt/20 animate-float">
+          <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl shadow-cobalt/20 animate-float bg-gradient-to-br from-cloud to-blue-50 flex items-center justify-center aspect-[4/3] p-10">
             <UIImage
               src={HERO_IMG}
-              alt="Castelo inflável Brincaê Fest em laranja, azul cobalto e branco"
-              fittingType="fill"
-              className="w-full aspect-[4/3]"
+              alt="Logomarca Brincaê Infláveis"
+              fittingType="fit"
+              className="w-full h-full object-contain"
             />
           </div>
         </motion.div>
