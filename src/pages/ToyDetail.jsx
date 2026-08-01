@@ -148,7 +148,7 @@ export default function ToyDetail() {
               </div>
 
               <div className="flex items-center gap-2 text-sm text-cobalt/50 px-2">
-                <Check className="w-4 h-4 text-teal" /> Entrega, montagem e energia inclusas
+                <Check className="w-4 h-4 text-teal" /> Entrega e montagem inclusa
               </div>
             </div>
           </div>
