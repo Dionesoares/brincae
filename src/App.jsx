@@ -10,6 +10,7 @@ import AdminLoginModal from '@/components/AdminLoginModal';
 // Add page imports here
 import Home from './pages/Home';
 import Admin from './pages/Admin';
+import Evento from './pages/Evento';
 import ToyDetail from './pages/ToyDetail';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -40,6 +41,8 @@ const AuthenticatedApp = () => {
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route element={<ProtectedRoute unauthenticatedElement={<AdminLoginModal />} />}>
         <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/evento" element={<Evento />} />
+        <Route path="/admin/evento/:eventId" element={<Evento />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
