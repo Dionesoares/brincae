@@ -3,8 +3,26 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabaseClient";
 import AdminShell from "@/components/AdminShell";
-import { elapsedMilliseconds, formatChronometer } from "@/lib/chronometer";
-import { ArrowLeft, Loader2, Pause, Play, Plus, RotateCcw, Trash2, X } from "lucide-react";
+import {
+  loadMuted,
+  playBeep,
+  saveMuted,
+  subscribeAudioState,
+  isAudioUnlocked,
+  unlockAudio,
+} from "@/lib/alarmSound";
+import {
+  ONE_MINUTE_MS,
+  addTimePatch,
+  chronometerDisplay,
+  countdownTotalMilliseconds,
+  durationFromParts,
+  elapsedMilliseconds,
+  isAlarmActive,
+  isCountdown,
+  splitDuration,
+} from "@/lib/chronometer";
+import { AlarmClock, ArrowLeft, Loader2, Pause, Play, Plus, RotateCcw, Timer, Trash2, Volume2, VolumeX, X } from "lucide-react";
 
 const inputClass =
   "w-full h-12 px-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-teal";
@@ -252,6 +270,29 @@ function EventDetail({ eventId }) {
   const children = childrenQuery.data ?? [];
   const anyRunning = children.some((child) => child.started_at);
   const requestSeq = useRef({});
+  const [muted, setMuted] = useState(loadMuted);
+  const [audioUnlocked, setAudioUnlocked] = useState(isAudioUnlocked);
+  const anyCountdownRunning = children.some((child) => child.started_at && isCountdown(child));
+
+  useEffect(() => {
+    const unlock = () => unlockAudio();
+    window.addEventListener("pointerdown", unlock, true);
+    window.addEventListener("keydown", unlock, true);
+    const unsubscribe = subscribeAudioState(setAudioUnlocked);
+    return () => {
+      window.removeEventListener("pointerdown", unlock, true);
+      window.removeEventListener("keydown", unlock, true);
+      unsubscribe();
+    };
+  }, []);
+
+  const toggleMuted = () => {
+    const next = !muted;
+    unlockAudio();
+    setMuted(next);
+    saveMuted(next);
+    if (!next) playBeep();
+  };
 
   useEffect(() => {
     if (!anyRunning) return undefined;
@@ -331,7 +372,24 @@ function EventDetail({ eventId }) {
   };
 
   const reset = (child) => {
-    patchChild(child, { elapsed_ms: 0, started_at: null });
+    patchChild(child, { elapsed_ms: 0, started_at: null, added_ms: 0 });
+  };
+
+  const changeMode = (child, mode) => {
+    if ((child.mode ?? "up") === mode) return;
+    const hasProgress = Boolean(child.started_at) || elapsedMilliseconds(child) > 0 || Number(child.added_ms) > 0;
+    if (hasProgress && !confirm(`Trocar o modo de "${child.name}"? O cronômetro desta criança será zerado.`)) return;
+    patchChild(child, { mode, elapsed_ms: 0, started_at: null, added_ms: 0 });
+  };
+
+  const setDuration = (child, durationMs) => {
+    patchChild(child, { duration_ms: durationMs, elapsed_ms: 0, started_at: null, added_ms: 0 });
+  };
+
+  const addTime = (child, ms) => {
+    if (!(ms > 0)) return;
+    setNow(Date.now());
+    patchChild(child, addTimePatch(child, ms));
   };
 
   if (eventQuery.isLoading || childrenQuery.isLoading) {
@@ -360,13 +418,32 @@ function EventDetail({ eventId }) {
       <Link to="/admin/evento" className="inline-flex items-center gap-2 text-sm font-semibold text-white/60 hover:text-white mb-6">
         <ArrowLeft className="w-4 h-4" /> Eventos
       </Link>
-      <div className="mb-8">
-        <h1 className="font-heading text-3xl">{event.name}</h1>
-        <p className="text-white/50 mt-1">
-          {event.event_date ? formatEventDate(event.event_date) : "Sem data"}
-          {" · "}
-          Cada criança tem o próprio cronômetro.
-        </p>
+      <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="font-heading text-3xl">{event.name}</h1>
+          <p className="text-white/50 mt-1">
+            {event.event_date ? formatEventDate(event.event_date) : "Sem data"}
+            {" · "}
+            Cada criança tem o próprio cronômetro, progressivo ou regressivo.
+          </p>
+          <p className="text-white/40 text-sm mt-1">No regressivo, o alarme pulsa e apita no último minuto.</p>
+        </div>
+        <div className="flex flex-col items-end gap-1">
+          <button
+            type="button"
+            onClick={toggleMuted}
+            aria-pressed={muted}
+            className={`h-11 px-5 inline-flex items-center gap-2 rounded-full text-sm font-bold transition-colors ${
+              muted ? "bg-white/10 text-white/70 hover:bg-white/15" : "bg-teal/20 text-teal hover:bg-teal/30"
+            }`}
+          >
+            {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+            {muted ? "Som desligado" : "Som ligado"}
+          </button>
+          {!muted && !audioUnlocked && anyCountdownRunning && (
+            <p className="text-xs text-orange" role="status">Clique em qualquer lugar da página para ativar o som do alarme.</p>
+          )}
+        </div>
       </div>
 
       <form onSubmit={addChild} className="rounded-[2rem] bg-white/5 border border-white/10 p-4 sm:p-5 flex flex-col sm:flex-row gap-3 mb-8">
@@ -401,9 +478,13 @@ function EventDetail({ eventId }) {
               key={child.id}
               child={child}
               now={now}
+              muted={muted}
               onStart={() => start(child)}
               onPause={() => pause(child)}
               onReset={() => reset(child)}
+              onChangeMode={(mode) => changeMode(child, mode)}
+              onSetDuration={(ms) => setDuration(child, ms)}
+              onAddTime={(ms) => addTime(child, ms)}
               onRemove={() => removeChild(child)}
             />
           ))}
@@ -413,17 +494,53 @@ function EventDetail({ eventId }) {
   );
 }
 
-function ChildChronometer({ child, now, onStart, onPause, onReset, onRemove }) {
+function ChildChronometer({ child, now, muted, onStart, onPause, onReset, onChangeMode, onSetDuration, onAddTime, onRemove }) {
   const running = Boolean(child.started_at);
-  const label = formatChronometer(elapsedMilliseconds(child, now));
+  const countdown = isCountdown(child);
+  const { label, finished, overtime } = chronometerDisplay(child, now);
+  const noDuration = countdown && countdownTotalMilliseconds(child) <= 0;
+  const alarming = isAlarmActive(child, now);
+  const mutedRef = useRef(muted);
+  mutedRef.current = muted;
+
+  useEffect(() => {
+    if (!alarming) return undefined;
+    const beep = () => {
+      if (!mutedRef.current) playBeep();
+    };
+    beep();
+    const id = setInterval(beep, 1000);
+    return () => clearInterval(id);
+  }, [alarming]);
+
+  const statusText = finished
+    ? "Tempo esgotado!"
+    : alarming
+      ? "Último minuto!"
+      : running
+      ? "Em andamento"
+      : countdown && noDuration
+        ? "Defina a duração"
+        : "Pausado";
+  const statusColor = finished ? "text-red-300" : alarming ? "text-orange" : running ? "text-teal" : "text-white/40";
+  const displayColor = finished ? "text-red-400" : running ? "text-orange" : "text-white";
 
   return (
-    <article className="rounded-[2rem] bg-white/5 border border-white/10 p-6 flex flex-col gap-5">
+    <article
+      className={`rounded-[2rem] border p-6 flex flex-col gap-5 transition-colors ${
+        finished
+          ? "bg-red-500/15 border-red-500/60 ring-2 ring-red-500/50"
+          : alarming
+            ? "bg-orange/10 border-orange/70 ring-2 ring-orange/50 animate-pulse"
+            : "bg-white/5 border-white/10"
+      }`}
+      data-state={finished ? "finished" : alarming ? "alarm" : running ? "running" : "paused"}
+    >
       <div className="flex items-start justify-between gap-3">
         <div>
           <h2 className="font-heading text-2xl leading-tight">{child.name}</h2>
-          <p className={`text-sm font-bold mt-1 ${running ? "text-teal" : "text-white/40"}`}>
-            {running ? "Em andamento" : "Pausado"}
+          <p className={`text-sm font-bold mt-1 ${statusColor}`} role={finished ? "alert" : undefined}>
+            {statusText}
           </p>
         </div>
         <button
@@ -435,15 +552,31 @@ function ChildChronometer({ child, now, onStart, onPause, onReset, onRemove }) {
         </button>
       </div>
 
+      <div className="grid grid-cols-2 gap-1 p-1 rounded-full bg-white/5" role="group" aria-label={`Modo do cronômetro de ${child.name}`}>
+        <ModeButton active={!countdown} disabled={running} onClick={() => onChangeMode("up")}>
+          <Timer className="w-4 h-4" /> Progressivo
+        </ModeButton>
+        <ModeButton active={countdown} disabled={running} onClick={() => onChangeMode("down")}>
+          <AlarmClock className="w-4 h-4" /> Regressivo
+        </ModeButton>
+      </div>
+
+      {countdown && <DurationEditor child={child} disabled={running} onSet={onSetDuration} />}
+
       <p
-        className={`font-mono text-5xl sm:text-6xl tracking-tight tabular-nums text-center ${running ? "text-orange" : "text-white"}`}
+        className={`font-mono text-5xl sm:text-6xl tracking-tight tabular-nums text-center ${displayColor}`}
         aria-label={`Cronômetro de ${child.name}: ${label}`}
       >
         {label}
       </p>
+      {countdown && !noDuration && (
+        <p className="text-center text-xs text-white/40 -mt-3">
+          {overtime ? "Tempo além do limite" : "Tempo restante"} · total {formatMinutesSeconds(countdownTotalMilliseconds(child))}
+        </p>
+      )}
 
       <div className="grid grid-cols-3 gap-2">
-        <TimerButton onClick={onStart} disabled={running} label="Iniciar">
+        <TimerButton onClick={onStart} disabled={running || noDuration} label="Iniciar">
           <Play className="w-4 h-4" /> Iniciar
         </TimerButton>
         <TimerButton onClick={onPause} disabled={!running} label="Pausar">
@@ -453,7 +586,155 @@ function ChildChronometer({ child, now, onStart, onPause, onReset, onRemove }) {
           <RotateCcw className="w-4 h-4" /> Zerar
         </TimerButton>
       </div>
+
+      <AddTime child={child} countdown={countdown} onAdd={onAddTime} />
     </article>
+  );
+}
+
+function ModeButton({ active, disabled, onClick, children }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled && !active}
+      aria-pressed={active}
+      className={`h-9 inline-flex items-center justify-center gap-1.5 rounded-full text-sm font-bold transition-colors ${
+        active ? "bg-orange text-white" : "text-white/60 hover:text-white disabled:opacity-30 disabled:hover:text-white/60"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function MinutesSecondsFields({ minutes, seconds, onMinutes, onSeconds, disabled, label }) {
+  const fieldClass =
+    "w-full h-11 px-3 rounded-2xl bg-white/5 border border-white/10 text-white text-center tabular-nums focus:outline-none focus:ring-2 focus:ring-teal disabled:opacity-40";
+  return (
+    <>
+      <label className="flex-1 min-w-0">
+        <span className="sr-only">{label} (minutos)</span>
+        <input
+          type="number"
+          min="0"
+          inputMode="numeric"
+          value={minutes}
+          disabled={disabled}
+          onChange={(e) => onMinutes(e.target.value)}
+          placeholder="min"
+          className={fieldClass}
+        />
+      </label>
+      <span className="text-white/40 font-bold">:</span>
+      <label className="flex-1 min-w-0">
+        <span className="sr-only">{label} (segundos)</span>
+        <input
+          type="number"
+          min="0"
+          max="59"
+          inputMode="numeric"
+          value={seconds}
+          disabled={disabled}
+          onChange={(e) => onSeconds(e.target.value)}
+          placeholder="seg"
+          className={fieldClass}
+        />
+      </label>
+    </>
+  );
+}
+
+function DurationEditor({ child, disabled, onSet }) {
+  const initial = splitDuration(child.duration_ms);
+  const [minutes, setMinutes] = useState(String(initial.minutes));
+  const [seconds, setSeconds] = useState(String(initial.seconds));
+
+  useEffect(() => {
+    const parts = splitDuration(child.duration_ms);
+    setMinutes(String(parts.minutes));
+    setSeconds(String(parts.seconds));
+  }, [child.duration_ms]);
+
+  const submit = (e) => {
+    e.preventDefault();
+    const ms = durationFromParts(minutes, seconds);
+    if (ms <= 0) {
+      alert("Informe uma duração maior que zero.");
+      return;
+    }
+    onSet(ms);
+  };
+
+  return (
+    <form onSubmit={submit} className="flex flex-col gap-2">
+      <span className="text-xs font-bold text-white/60">Duração inicial (min : seg)</span>
+      <div className="flex items-center gap-2">
+        <MinutesSecondsFields
+          minutes={minutes}
+          seconds={seconds}
+          onMinutes={setMinutes}
+          onSeconds={setSeconds}
+          disabled={disabled}
+          label={`Duração de ${child.name}`}
+        />
+        <button
+          type="submit"
+          disabled={disabled}
+          className="h-11 px-4 rounded-full bg-teal/20 text-teal text-sm font-bold hover:bg-teal/30 transition-colors disabled:opacity-30"
+        >
+          Definir
+        </button>
+      </div>
+    </form>
+  );
+}
+
+function AddTime({ child, countdown, onAdd }) {
+  const [minutes, setMinutes] = useState("");
+  const [seconds, setSeconds] = useState("");
+
+  const addCustom = (e) => {
+    e.preventDefault();
+    const ms = durationFromParts(minutes, seconds);
+    if (ms <= 0) {
+      alert("Informe o tempo a adicionar.");
+      return;
+    }
+    onAdd(ms);
+    setMinutes("");
+    setSeconds("");
+  };
+
+  return (
+    <div className="flex flex-col gap-2 pt-4 border-t border-white/10">
+      <span className="text-xs font-bold text-white/60">
+        {countdown ? "Adicionar tempo restante" : "Adicionar tempo ao cronômetro"}
+      </span>
+      <div className="grid grid-cols-2 gap-2">
+        <TimerButton onClick={() => onAdd(ONE_MINUTE_MS)} label={`Adicionar 1 minuto para ${child.name}`}>
+          +1 min
+        </TimerButton>
+        <TimerButton onClick={() => onAdd(5 * ONE_MINUTE_MS)} label={`Adicionar 5 minutos para ${child.name}`}>
+          +5 min
+        </TimerButton>
+      </div>
+      <form onSubmit={addCustom} className="flex items-center gap-2">
+        <MinutesSecondsFields
+          minutes={minutes}
+          seconds={seconds}
+          onMinutes={setMinutes}
+          onSeconds={setSeconds}
+          label={`Tempo personalizado para ${child.name}`}
+        />
+        <button
+          type="submit"
+          className="h-11 px-4 inline-flex items-center gap-1 rounded-full bg-orange/20 text-orange text-sm font-bold hover:bg-orange/30 transition-colors"
+        >
+          <Plus className="w-4 h-4" /> Outro
+        </button>
+      </form>
+    </div>
   );
 }
 
@@ -469,6 +750,11 @@ function TimerButton({ onClick, disabled, label, children }) {
       {children}
     </button>
   );
+}
+
+function formatMinutesSeconds(ms) {
+  const { minutes, seconds } = splitDuration(ms);
+  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
 
 function formatEventDate(isoDate) {
