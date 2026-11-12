@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabaseClient";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ToyForm from "@/components/ToyForm";
 import BannerForm from "@/components/BannerForm";
 import BrandingForm from "@/components/BrandingForm";
+import AdminShell from "@/components/AdminShell";
 import { Image as UIImage } from "@/components/ui/image";
-import { useSiteSettings } from "@/hooks/useSiteSettings";
-import { useAuth } from "@/lib/AuthContext";
-import { Plus, Pencil, Trash2, X, Loader2, ExternalLink, ArrowUp, ArrowDown, ImageOff, EyeOff, LogOut } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Loader2, ExternalLink, ArrowUp, ArrowDown, ImageOff, EyeOff } from "lucide-react";
 
 const statusMap = {
   disponivel: { label: "Disponível", cls: "bg-teal/15 text-teal" },
@@ -16,98 +15,41 @@ const statusMap = {
   manutencao: { label: "Manutenção", cls: "bg-red-500/20 text-red-400" },
 };
 
-const TABS = [
-  { id: "toys", label: "Brinquedos" },
-  { id: "banners", label: "Banners promocionais" },
-  { id: "branding", label: "Marca" },
-];
-
 const NEW_LABEL = { toys: "Novo Brinquedo", banners: "Novo Banner" };
+const ADMIN_TABS = ["toys", "banners", "branding"];
 
 export default function Admin() {
-  const { logoUrl } = useSiteSettings();
-  const { logout } = useAuth();
-  const [tab, setTab] = useState("toys");
+  const location = useLocation();
+  const requestedTab = location.state?.tab;
+  const [tab, setTab] = useState(ADMIN_TABS.includes(requestedTab) ? requestedTab : "toys");
   const [showForm, setShowForm] = useState(false);
-  const [loggingOut, setLoggingOut] = useState(false);
-
-  const handleLogout = async () => {
-    setLoggingOut(true);
-    await logout();
-  };
 
   return (
-    <div className="min-h-screen bg-cobalt text-white dark">
-      {/* Top bar */}
-      <header className="border-b border-white/10 sticky top-0 z-30 bg-cobalt/90 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="w-12 h-12 rounded-2xl overflow-hidden">
-              <UIImage
-                src={logoUrl}
-                alt="Logomarca Brincaê Infláveis"
-                fittingType="fit"
-                className="w-full h-full object-contain"
-              />
-            </span>
-            <div>
-              <p className="font-heading text-lg leading-none">
-                Brincaê<span className="text-orange">Fest</span>
-              </p>
-              <p className="text-xs text-white/40">Painel Administrativo</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link to="/" className="text-sm font-semibold text-white/60 hover:text-white transition-colors hidden sm:inline">
-              Ver site
-            </Link>
-            {NEW_LABEL[tab] && (
-              <button
-                onClick={() => setShowForm(true)}
-                className="h-12 px-6 inline-flex items-center gap-2 rounded-full bg-orange text-white font-bold shadow-lg shadow-orange/30 hover:scale-105 transition-transform"
-              >
-                <Plus className="w-5 h-5" /> {NEW_LABEL[tab]}
-              </button>
-            )}
-            <button
-              onClick={handleLogout}
-              disabled={loggingOut}
-              title="Sair"
-              className="h-12 w-12 sm:w-auto sm:px-5 inline-flex items-center justify-center gap-2 rounded-full bg-white/10 text-white font-bold hover:bg-white/15 transition-colors disabled:opacity-50"
-            >
-              {loggingOut ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogOut className="w-4 h-4" />}
-              <span className="hidden sm:inline">Sair</span>
-            </button>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto px-6 lg:px-10 flex gap-2 pb-4">
-          {TABS.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => {
-                setTab(t.id);
-                setShowForm(false);
-              }}
-              className={`h-10 px-5 rounded-full text-sm font-bold transition-colors ${
-                tab === t.id ? "bg-orange text-white" : "bg-white/5 text-white/60 hover:bg-white/10"
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-6 lg:px-10 py-10">
-        {tab === "toys" ? (
-          <ToysPanel showForm={showForm} setShowForm={setShowForm} />
-        ) : tab === "banners" ? (
-          <BannersPanel showForm={showForm} setShowForm={setShowForm} />
-        ) : (
-          <BrandingForm />
-        )}
-      </main>
-    </div>
+    <AdminShell
+      active={tab}
+      onTab={(id) => {
+        setTab(id);
+        setShowForm(false);
+      }}
+      action={
+        NEW_LABEL[tab] ? (
+          <button
+            onClick={() => setShowForm(true)}
+            className="h-12 px-6 inline-flex items-center gap-2 rounded-full bg-orange text-white font-bold shadow-lg shadow-orange/30 hover:scale-105 transition-transform"
+          >
+            <Plus className="w-5 h-5" /> {NEW_LABEL[tab]}
+          </button>
+        ) : null
+      }
+    >
+      {tab === "toys" ? (
+        <ToysPanel showForm={showForm} setShowForm={setShowForm} />
+      ) : tab === "banners" ? (
+        <BannersPanel showForm={showForm} setShowForm={setShowForm} />
+      ) : (
+        <BrandingForm />
+      )}
+    </AdminShell>
   );
 }
 
